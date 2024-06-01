@@ -4,7 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "BasePawn.h"
+#include "InputAction.h"
 #include "Tank.generated.h"
+
+class UInputMappingContext;
 
 /**
  * 
@@ -16,6 +19,21 @@ class TOONTANKS_API ATank : public ABasePawn
 	
 public:
 	ATank();
+
+protected:
+	virtual void BeginPlay() override;
+
+	void InitializeInputMappings();
+
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	void Movement(const FInputActionValue& Value);
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivate));
+	UInputMappingContext* TankMappingContext; 
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivate));
+	UInputAction* MoveAction;
 
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera Setup", meta = (AllowPrivateAccess = "true"));

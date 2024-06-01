@@ -39,7 +39,8 @@ void ATank::Movement(const FInputActionValue& Value)
     const FVector2D CurrentValue = Value.Get<FVector2D>();
     if (CurrentValue.Length() > 0.0f)    
     {
-        UE_LOG(LogTemp, Warning, TEXT("Movement: %s"), *CurrentValue.ToString());
+        FVector DeltaLocation = FVector(CurrentValue.X, CurrentValue.Y, 0.0f);
+        AddActorLocalOffset(DeltaLocation);
     }
 }
 

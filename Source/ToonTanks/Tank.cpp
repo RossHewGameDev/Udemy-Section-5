@@ -5,6 +5,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
 #include "Components/InputComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "GameFramework/SpringArmComponent.h"
 
 ATank::ATank()
@@ -21,6 +22,8 @@ void ATank::BeginPlay()
     Super::BeginPlay();
 
     InitializeInputMappings();
+    PlayerControllerRef = Cast<APlayerController>(GetController());
+
 }
 
 void ATank::InitializeInputMappings()
@@ -36,11 +39,24 @@ void ATank::InitializeInputMappings()
 
 void ATank::Movement(const FInputActionValue& Value)
 {
-    const FVector2D CurrentValue = Value.Get<FVector2D>();
+    const FVector CurrentValue = Value.Get<FVector>();
     if (CurrentValue.Length() > 0.0f)    
     {
-        FVector DeltaLocation = FVector(CurrentValue.X, CurrentValue.Y, 0.0f);
-        AddActorLocalOffset(DeltaLocation);
+        FVector DeltaLocation = CurrentValue;
+        DeltaLocation = CurrentValue * Speed * UGameplayStatics::GetWorldDeltaSeconds(this);
+        AddActorLocalOffset(DeltaLocation, true);
+    }
+}
+
+void ATank::Rotation(const FInputActionValue& Value)
+{
+    const FVector CurrentValue = Value.Get<FVector>();
+
+    if (CurrentValue.Length() > 0.0f)
+    {
+        FRotator DeltaRotation = FRotator(0.0f, CurrentValue.X, 0.0f);
+        DeltaRotation = DeltaRotation * RotateSpeed * UGameplayStatics::GetWorldDeltaSeconds(this);
+        AddActorLocalRotation(DeltaRotation, true);
     }
 }
 
@@ -51,6 +67,7 @@ void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
     if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
     {
         EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ATank::Movement);
+        EnhancedInputComponent->BindAction(RotateAction, ETriggerEvent::Triggered, this, &ATank::Rotation);
     }
 
 }

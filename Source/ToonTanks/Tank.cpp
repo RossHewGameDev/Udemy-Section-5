@@ -6,6 +6,8 @@
 #include "EnhancedInputComponent.h"
 #include "Components/InputComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "DrawDebugHelpers.h"
+#include "GameFrameWork/PlayerController.h"
 #include "GameFramework/SpringArmComponent.h"
 
 ATank::ATank()
@@ -23,6 +25,25 @@ void ATank::BeginPlay()
 
     InitializeInputMappings();
     PlayerControllerRef = Cast<APlayerController>(GetController());
+
+}
+
+// Called every frame
+void ATank::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+    if (PlayerControllerRef)
+    {
+        FHitResult HitResult;
+        PlayerControllerRef->GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, 
+        false,
+        HitResult
+        );
+        DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 25, 12, FColor::Red, false, 0.0f);
+
+        RotateTurret(HitResult.ImpactPoint);
+    }
 
 }
 
@@ -60,6 +81,15 @@ void ATank::Rotation(const FInputActionValue& Value)
     }
 }
 
+void ATank::Fire(const FInputActionValue& Value)
+{
+    if (Value.Get<bool>())
+    {
+        // Fire Projectile
+        UE_LOG(LogTemp, Warning, TEXT("Fire!"));
+    }
+}
+
 void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
     Super::SetupPlayerInputComponent(PlayerInputComponent);
@@ -68,6 +98,7 @@ void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
     {
         EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ATank::Movement);
         EnhancedInputComponent->BindAction(RotateAction, ETriggerEvent::Triggered, this, &ATank::Rotation);
+        EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Triggered, this, &ATank::Fire);
     }
 
 }

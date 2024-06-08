@@ -16,14 +16,15 @@ public:
 	ABasePawn();
 
 public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
 	int32 MaxHealth;
+
+protected:
+
+	void RotateTurret(FVector LookAtTarget);
 
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MeshComponents", meta = (AllowPrivateAccess = "true"))

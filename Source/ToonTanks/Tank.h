@@ -20,6 +20,9 @@ class TOONTANKS_API ATank : public ABasePawn
 public:
 	ATank();
 
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -39,6 +42,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"));
 	UInputAction* FireAction;
 
+	// UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"));
+	// UInputAction* TurretControlAction;
+
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera Setup", meta = (AllowPrivateAccess = "true"));
 	class USpringArmComponent* SpringArm;
@@ -54,6 +60,7 @@ private:
 
 	void Movement(const FInputActionValue& Value);
 	void Rotation(const FInputActionValue& Value);
+	void Fire(const FInputActionValue& Value);
 
 	APlayerController* PlayerControllerRef;
 };

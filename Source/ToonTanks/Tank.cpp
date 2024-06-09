@@ -81,15 +81,6 @@ void ATank::Rotation(const FInputActionValue& Value)
     }
 }
 
-void ATank::Fire(const FInputActionValue& Value)
-{
-    if (Value.Get<bool>())
-    {
-        // Fire Projectile
-        UE_LOG(LogTemp, Warning, TEXT("Fire!"));
-    }
-}
-
 void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
     Super::SetupPlayerInputComponent(PlayerInputComponent);

@@ -60,7 +60,6 @@ private:
 
 	void Movement(const FInputActionValue& Value);
 	void Rotation(const FInputActionValue& Value);
-	void Fire(const FInputActionValue& Value);
 
 	APlayerController* PlayerControllerRef;
 };

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "InputAction.h"
 #include "BasePawn.generated.h"
 
 UCLASS()
@@ -25,6 +26,7 @@ public:
 protected:
 
 	void RotateTurret(FVector LookAtTarget);
+	void Fire();
 
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MeshComponents", meta = (AllowPrivateAccess = "true"))
